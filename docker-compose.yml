@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: flask-web
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: your_password
+      MYSQL_DATABASE: my_database
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+
+  # 🟢 เพิ่มส่วนนี้เข้าไปครับ
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: docker-phpmyadmin
+    restart: always
+    ports:
+      - "8085:80"  # ตั้งพอร์ตเครื่องเป็น 8085 เพื่อไม่ให้ชนกับ XAMPP (8080)
+    environment:
+      PMA_HOST: db  # ชี้ไปที่ตู้ฐานข้อมูล mysql-db
+      PMA_USER: root
+      PMA_PASSWORD: your_password
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
