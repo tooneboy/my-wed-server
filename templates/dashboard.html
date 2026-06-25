@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Application Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; }
+        .navbar { background-color: #212529; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h2 { margin: 0; font-size: 20px; }
+        .btn-logout { color: #fff; background-color: #dc3545; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .welcome-box { border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
+        .main-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .main-table th, .main-table td { border: 1px solid #dee2e6; padding: 12px; text-align: left; }
+        .main-table th { background-color: #f1f3f5; font-weight: 600; }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .status-pending { background-color: #fff3cd; color: #856404; }
+        .status-progress { background-color: #cce5ff; color: #004085; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>ระบบเว็บแอปพลิเคชันหลัก (Main Application)</h2>
+        <div>
+            <span style="margin-right: 15px;">ผู้ใช้งาน: <strong>{{ user }}</strong> 👤</span>
+            <a href="/logout" class="btn-logout">ออกจากระบบ</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-box">
+            <h1>ยินดีต้อนรับเข้าสู่ระบบจัดการข้อมูลหลัก! 🎉</h1>
+            <p>นี่คือหน้าระบบงานหลักที่ทำการดึงข้อมูลรายการมาจากฐานข้อมูล MySQL บน Docker โดยตรง</p>
+        </div>
+
+        <h3>รายการข้อมูลในระบบทั้งหมด</h3>
+        <table class="main-table">
+            <thead>
+                <tr>
+                    <th>ลำดับ (ID)</th>
+                    <th>หัวข้อเรื่อง (Title)</th>
+                    <th>รายละเอียด (Description)</th>
+                    <th>สถานะ (Status)</th>
+                    <th>วันที่สร้าง (Created At)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td><strong>{{ item.title }}</strong></td>
+                    <td>{{ item.description }}</td>
+                    <td>
+                        {% if item.status == 'Pending' %}
+                            <span class="status-badge status-pending">{{ item.status }}</span>
+                        {% else %}
+                            <span class="status-badge status-progress">{{ item.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.created_at }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #888;">ยังไม่มีข้อมูลในฐานข้อมูลตอนนี้</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
