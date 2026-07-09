@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>แก้ไขข้อมูล (Edit Item)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; }
+        .navbar { background-color: #212529; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h2 { margin: 0; font-size: 20px; }
+        .container { max-width: 600px; margin: 40px auto; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #dee2e6; border-radius: 4px; box-sizing: border-box; }
+        .btn-submit { background-color: #0d6efd; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .btn-cancel { background-color: #6c757d; color: white; text-decoration: none; padding: 10px 20px; border-radius: 4px; margin-left: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>ระบบเว็บแอปพลิเคชันหลัก (Main Application)</h2>
+    </div>
+
+    <div class="container">
+        <h2 style="margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 15px;">✏️ แก้ไขรายการ (ID: {{ item.id }})</h2>
+        
+        <form action="/edit/{{ item.id }}" method="POST">
+            <div class="form-group">
+                <label>หัวข้อเรื่อง (Title)</label>
+                <input type="text" name="title" class="form-control" value="{{ item.title }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>รายละเอียด (Description)</label>
+                <textarea name="description" class="form-control" rows="4" required>{{ item.description }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>สถานะ (Status)</label>
+                <select name="status" class="form-control">
+                    <option value="Pending" {% if item.status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="In Progress" {% if item.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Completed" {% if item.status == 'Completed' %}selected{% endif %}>Completed</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn-submit">อัปเดตข้อมูล</button>
+            <a href="/dashboard" class="btn-cancel">ยกเลิก</a>
+        </form>
+    </div>
+
+</body>
+</html>

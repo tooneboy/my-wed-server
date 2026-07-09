@@ -34,6 +34,21 @@
             <p>นี่คือหน้าระบบงานหลักที่ทำการดึงข้อมูลรายการมาจากฐานข้อมูล MySQL บน Docker โดยตรง</p>
         </div>
 
+        <!-- ฟอร์มสำหรับเพิ่มข้อมูลใหม่ -->
+        <div style="background-color: #f1f3f5; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h4 style="margin-top: 0;">➕ เพิ่มรายการแจ้งซ่อม/งานใหม่</h4>
+            <form action="/add" method="POST" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="text" name="title" placeholder="หัวข้อเรื่อง (Title)" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 1;">
+                <input type="text" name="description" placeholder="รายละเอียดอาการ" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 2;">
+                <select name="status" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+                <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 9px 15px; border-radius: 4px; cursor: pointer;">บันทึกข้อมูล</button>
+            </form>
+        </div>
+
         <h3>รายการข้อมูลในระบบทั้งหมด</h3>
         <table class="main-table">
             <thead>
@@ -43,6 +58,7 @@
                     <th>รายละเอียด (Description)</th>
                     <th>สถานะ (Status)</th>
                     <th>วันที่สร้าง (Created At)</th>
+                    <th>จัดการ</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,10 +75,17 @@
                         {% endif %}
                     </td>
                     <td>{{ item.created_at }}</td>
+                   <td>
+                        <!-- ปุ่มแก้ไข (สีเหลือง) -->
+                        <a href="/edit/{{ item.id }}" style="background-color: #ffc107; color: #212529; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 13px; font-weight: bold;">แก้ไข</a>
+                        
+                        <!-- ปุ่มลบ (สีแดง) พร้อมระบบแจ้งเตือนกดยืนยันก่อนลบ -->
+                        <a href="/delete/{{ item.id }}" onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้? (ลบแล้วกู้คืนไม่ได้นะครับ)');" style="background-color: #dc3545; color: white; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 13px; font-weight: bold; margin-left: 5px;">ลบ</a>
+                    </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="5" style="text-align: center; color: #888;">ยังไม่มีข้อมูลในฐานข้อมูลตอนนี้</td>
+                    <td colspan="6" style="text-align: center; color: #888;">ยังไม่มีข้อมูลในฐานข้อมูลตอนนี้</td>
                 </tr>
                 {% endfor %}
             </tbody>
